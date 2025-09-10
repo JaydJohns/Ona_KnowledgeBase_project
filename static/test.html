@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Brain - Test Interface</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .loading {
+            color: #6b7280;
+            font-style: italic;
+        }
+        .error {
+            color: #dc2626;
+            background: #fef2f2;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #fecaca;
+        }
+        .success {
+            color: #059669;
+            background: #f0fdf4;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #bbf7d0;
+        }
+        .concept-tag {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        .highlight {
+            background: #fef08a;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 Second Brain Knowledge Repository</h1>
+        <p>Test interface for the HCI document management system</p>
+        <div>
+            <button class="btn" onclick="loadDashboard()">Load Dashboard</button>
+            <button class="btn" onclick="loadDocuments()">Load Documents</button>
+            <button class="btn" onclick="loadConcepts()">Load Concepts</button>
+            <button class="btn" onclick="loadConceptGraph()">Load Concept Graph</button>
+        </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="section">
+        <h2>🔍 Search</h2>
+        <input type="text" class="search-box" id="searchInput" placeholder="Search documents and concepts..." onkeypress="handleSearchKeypress(event)">
+        <button class="btn" onclick="performSearch()">Search</button>
+        <div id="searchResults"></div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="section">
+        <h2>📊 Dashboard</h2>
+        <div id="dashboardContent">
+            <p class="loading">Click "Load Dashboard" to see statistics</p>
+        </div>
+    </div>
+
+    <!-- Documents Section -->
+    <div class="section">
+        <h2>📄 Documents</h2>
+        <div id="documentsContent">
+            <p class="loading">Click "Load Documents" to see document list</p>
+        </div>
+    </div>
+
+    <!-- Concepts Section -->
+    <div class="section">
+        <h2>🧩 Concepts</h2>
+        <div id="conceptsContent">
+            <p class="loading">Click "Load Concepts" to see concept list</p>
+        </div>
+    </div>
+
+    <!-- Concept Graph Section -->
+    <div class="section">
+        <h2>🕸️ Concept Graph</h2>
+        <div id="graphContent">
+            <p class="loading">Click "Load Concept Graph" to see network visualization</p>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+
+        async function apiCall(endpoint) {
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).innerHTML = `<div class="error">Error: ${message}</div>`;
+        }
+
+        function showLoading(elementId) {
+            document.getElementById(elementId).innerHTML = '<p class="loading">Loading...</p>';
+        }
+
+        async function loadDashboard() {
+            showLoading('dashboardContent');
+            try {
+                const [docStats, conceptStats] = await Promise.all([
+                    apiCall('/api/documents/stats'),
+                    apiCall('/api/concepts/stats')
+                ]);
+
+                const html = `
+                    <div class="grid">
+                        <div class="card">
+                            <h3>📄 Documents</h3>
+                            <p><strong>${docStats.total_documents}</strong> total documents</p>
+                            <p><strong>${docStats.total_words.toLocaleString()}</strong> total words</p>
+                        </div>
+                        <div class="card">
+                            <h3>🧩 Concepts</h3>
+                            <p><strong>${conceptStats.total_concepts}</strong> total concepts</p>
+                            <p><strong>${conceptStats.total_relations}</strong> relationships</p>
+                        </div>
+                        <div class="card">
+                            <h3>📊 File Types</h3>
+                            ${docStats.file_types.map(ft => `<p>${ft.type.includes('pdf') ? '📄 PDF' : '📝 Word'}: ${ft.count}</p>`).join('')}
+                        </div>
+                        <div class="card">
+                            <h3>🏷️ Top Categories</h3>
+                            ${conceptStats.top_categories.map(cat => `<p>${cat.category}: ${cat.count}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+                document.getElementById('dashboardContent').innerHTML = html;
+            } catch (error) {
+                showError('dashboardContent', error.message);
+            }
+        }
+
+        async function loadDocuments() {
+            showLoading('documentsContent');
+            try {
+                const data = await apiCall('/api/documents');
+                
+                if (data.documents.length === 0) {
+                    document.getElementById('documentsContent').innerHTML = '<p>No documents found. Upload some documents to get started!</p>';
+                    return;
+                }
+
+                const html = `
+                    <div class="grid">
+                        ${data.documents.map(doc => `
+                            <div class="card">
+                                <h4>${doc.title}</h4>
+                                <p><strong>File:</strong> ${doc.original_filename}</p>
+                                <p><strong>Type:</strong> ${doc.file_type.includes('pdf') ? '📄 PDF' : '📝 Word'}</p>
+                                <p><strong>Size:</strong> ${(doc.file_size / 1024).toFixed(1)} KB</p>
+                                <p><strong>Words:</strong> ${doc.word_count}</p>
+                                <p><strong>Status:</strong> ${doc.processing_status}</p>
+                                <p><strong>Uploaded:</strong> ${new Date(doc.upload_date).toLocaleDateString()}</p>
+                                <p class="summary">${doc.summary}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                document.getElementById('documentsContent').innerHTML = html;
+            } catch (error) {
+                showError('documentsContent', error.message);
+            }
+        }
+
+        async function loadConcepts() {
+            showLoading('conceptsContent');
+            try {
+                const data = await apiCall('/api/concepts');
+                
+                if (data.concepts.length === 0) {
+                    document.getElementById('conceptsContent').innerHTML = '<p>No concepts found. Upload and process documents to extract concepts!</p>';
+                    return;
+                }
+
+                const html = `
+                    <div class="grid">
+                        ${data.concepts.map(concept => `
+                            <div class="card">
+                                <h4>${concept.name}</h4>
+                                <span class="concept-tag">${concept.category}</span>
+                                <p><strong>Frequency:</strong> ${concept.frequency}</p>
+                                <p><strong>Created:</strong> ${new Date(concept.created_date).toLocaleDateString()}</p>
+                                ${concept.description ? `<p>${concept.description}</p>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                document.getElementById('conceptsContent').innerHTML = html;
+            } catch (error) {
+                showError('conceptsContent', error.message);
+            }
+        }
+
+        async function loadConceptGraph() {
+            showLoading('graphContent');
+            try {
+                const data = await apiCall('/api/concepts/graph');
+                
+                const html = `
+                    <div class="card">
+                        <h4>📊 Graph Statistics</h4>
+                        <p><strong>Nodes:</strong> ${data.nodes.length}</p>
+                        <p><strong>Edges:</strong> ${data.edges.length}</p>
+                    </div>
+                    <div class="card">
+                        <h4>🔗 Sample Connections</h4>
+                        ${data.edges.slice(0, 5).map(edge => {
+                            const sourceNode = data.nodes.find(n => n.id === edge.source);
+                            const targetNode = data.nodes.find(n => n.id === edge.target);
+                            return `<p>${sourceNode?.name} ↔ ${targetNode?.name}</p>`;
+                        }).join('')}
+                    </div>
+                    <div class="card">
+                        <h4>🏷️ Concept Categories</h4>
+                        ${[...new Set(data.nodes.map(n => n.category))].map(cat => 
+                            `<span class="concept-tag">${cat}</span>`
+                        ).join('')}
+                    </div>
+                `;
+                document.getElementById('graphContent').innerHTML = html;
+            } catch (error) {
+                showError('graphContent', error.message);
+            }
+        }
+
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                document.getElementById('searchResults').innerHTML = '<p>Please enter a search query</p>';
+                return;
+            }
+
+            document.getElementById('searchResults').innerHTML = '<p class="loading">Searching...</p>';
+            
+            try {
+                const data = await apiCall(`/api/search?q=${encodeURIComponent(query)}`);
+                
+                if (data.results.length === 0) {
+                    document.getElementById('searchResults').innerHTML = '<p>No results found</p>';
+                    return;
+                }
+
+                const html = `
+                    <div class="success">Found ${data.total_results} results for "${data.query}"</div>
+                    <div class="grid">
+                        ${data.results.map(result => `
+                            <div class="card">
+                                <h4>${result.document.title}</h4>
+                                <p><strong>Score:</strong> ${(result.score * 100).toFixed(1)}%</p>
+                                <p><strong>Type:</strong> ${result.search_type}</p>
+                                <p><strong>File:</strong> ${result.document.original_filename}</p>
+                                ${result.highlights.map(h => `
+                                    <p><strong>${h.source}:</strong> <span class="highlight">${h.text}</span></p>
+                                `).join('')}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                document.getElementById('searchResults').innerHTML = html;
+            } catch (error) {
+                showError('searchResults', error.message);
+            }
+        }
+
+        function handleSearchKeypress(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        }
+
+        // Load dashboard on page load
+        window.addEventListener('load', loadDashboard);
+    </script>
+</body>
+</html>
