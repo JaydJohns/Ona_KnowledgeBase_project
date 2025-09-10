@@ -87,7 +87,12 @@ const Upload = () => {
     accept: {
       'application/pdf': ['.pdf'],
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'application/msword': ['.doc']
+      'application/msword': ['.doc'],
+      'text/plain': ['.txt'],
+      'application/vnd.ms-powerpoint': ['.ppt'],
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      'application/vnd.ms-excel': ['.xls'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
     },
     maxSize: 50 * 1024 * 1024, // 50MB
     multiple: true
@@ -173,7 +178,7 @@ const Upload = () => {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Upload Documents</h1>
         <p className="text-gray-600">
-          Add PDF and Word documents to your knowledge repository
+          Add PDF, Word, Text, PowerPoint, and Excel documents to your knowledge repository
         </p>
       </div>
 
@@ -196,7 +201,7 @@ const Upload = () => {
               Drag & drop files here, or click to select files
             </p>
             <p className="text-sm text-gray-500">
-              Supports PDF and Word documents (max 50MB each)
+              Supports PDF, Word, Text, PowerPoint, and Excel documents (max 50MB each)
             </p>
           </div>
         )}
