@@ -1,38 +1,96 @@
+
 # Second Brain Knowledge Repository
 
-A comprehensive knowledge management system for Human-Computer Interaction documents that enables intelligent document organization, concept extraction, and knowledge discovery.
+A modern knowledge management system for Human-Computer Interaction (HCI) and general documents, featuring intelligent document organization, concept extraction, advanced search, analytics, and interactive visualization.
 
-## 🌟 Features
+## 🚀 Features
 
 ### Document Management
-- **Multi-format Support**: Upload PDF and Word documents (.pdf, .docx, .doc)
-- **Automatic Processing**: Text extraction, content analysis, and metadata generation
-- **Smart Organization**: Automatic categorization and tagging
-- **File Size Support**: Up to 50MB per document
+- **Multi-format Upload**: PDF, Word (.pdf, .docx, .doc), Text, PowerPoint, Excel
+- **Automatic Processing**: Text extraction, content/summary generation, metadata
+- **Smart Organization**: Tagging, categorization, and file type detection
+- **Pagination & Detail Views**: Browse, search, and view full document details
 
-### Intelligent Concept Extraction
-- **HCI-Focused**: Pre-trained with Human-Computer Interaction terminology
-- **Multi-method Analysis**: Pattern-based, NLP-based, and statistical concept detection
-- **Relationship Mapping**: Automatic discovery of concept relationships
-- **Category Classification**: Organized by HCI domains (usability, accessibility, etc.)
+### Concept Extraction & Knowledge Graph
+- **HCI-Focused**: Pre-trained with HCI terminology
+- **Concept Detection**: Pattern, NLP, and statistical methods
+- **Relationship Mapping**: Automatic concept graph and category classification
+- **Interactive Visualization**: Explore concepts and their relationships
 
 ### Advanced Search
-- **Hybrid Search**: Combines keyword, semantic, and concept-based search
-- **Smart Suggestions**: Auto-complete and query suggestions
-- **Filtered Results**: Search by file type, date range, concepts, and more
-- **Highlighted Results**: Context-aware result highlighting
+- **Hybrid Search**: Keyword, semantic, and concept-based
+- **Suggestions**: Auto-complete and query suggestions
+- **Filters**: By file type, date, concepts, and more
+- **Result Highlighting**: Context-aware highlights and matched concepts
 
-### Knowledge Visualization
-- **Interactive Graph**: Force-directed network visualization of concept relationships
-- **Customizable Views**: Adjust node size, link strength, and category colors
-- **Exploration Tools**: Zoom, pan, and filter the knowledge graph
-- **Connection Discovery**: Find hidden relationships between concepts
+### Analytics & Dashboard
+- **Statistics**: Document and concept counts, file type breakdowns, trends
+- **Dashboard**: Overview of repository health and activity
 
 ### Web Interface
-- **Modern Design**: Clean, responsive interface built with React
-- **Dashboard**: Overview of documents, concepts, and statistics
-- **Real-time Updates**: Live progress tracking for document processing
-- **Mobile Friendly**: Works on desktop, tablet, and mobile devices
+- **Modern React UI**: Responsive, mobile-friendly, and accessible
+- **Component Library**: Reusable, clean UI components
+- **Real-time Feedback**: Progress tracking, error handling, and notifications
+
+## 🏗️ Architecture
+
+```
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│   Frontend   │<──>│   Backend    │<──>│   Database   │
+│   (React)    │    │   (Flask)    │    │   (SQLite)   │
+└──────────────┘    └──────────────┘    └──────────────┘
+```
+
+## ⚡ Quick Start
+
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+- Git
+
+### Backend Setup
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd Ona_KnowledgeBase_project/second_brain_package
+   ```
+2. **Install Python dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Start the backend server**
+   ```bash
+   python app.py
+   ```
+   The API will be available at `http://localhost:5000`
+
+### Frontend Setup
+1. **Navigate to frontend directory**
+   ```bash
+   cd frontend
+   ```
+2. **Install Node.js dependencies**
+   ```bash
+   npm install
+   ```
+3. **Create a .env file**
+   ```env
+   REACT_APP_API_URL=http://localhost:5000/api
+   ```
+4. **Start the development server**
+   ```bash
+   npm start
+   ```
+   The web interface will be available at `http://localhost:3000`
+
+### Docker Setup (Optional)
+See INSTALLATION.md for full Docker instructions.
+
+### Test Interface
+For quick API testing:
+```
+http://localhost:5000/static/test.html
+```
 
 ## 🏗️ Architecture
 

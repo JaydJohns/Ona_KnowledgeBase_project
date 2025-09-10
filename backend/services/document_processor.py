@@ -9,11 +9,22 @@ from backend.models.document import Document, db
 import json
 
 class DocumentProcessor:
+    def extract_text_from_txt(self, filepath):
+        """Extract text content from plain text file"""
+        try:
+            with open(filepath, 'r', encoding='utf-8') as file:
+                text = file.read()
+            return {
+                'content': text.strip(),
+                'page_count': 1,
+                'word_count': len(text.split())
+            }
+        except Exception as e:
+            raise Exception(f"Error extracting text file content: {str(e)}")
     def __init__(self, upload_folder='uploads', processed_folder='processed_docs'):
         self.upload_folder = upload_folder
         self.processed_folder = processed_folder
-        self.allowed_extensions = {'pdf', 'docx', 'doc'}
-        
+        self.allowed_extensions = {'pdf', 'docx', 'doc', 'txt', 'ppt', 'pptx', 'xls', 'xlsx'}
         # Ensure directories exist
         os.makedirs(upload_folder, exist_ok=True)
         os.makedirs(processed_folder, exist_ok=True)
@@ -110,11 +121,27 @@ class DocumentProcessor:
             raise Exception(f"Error extracting Word document content: {str(e)}")
     
     def extract_content(self, filepath, file_type):
-        """Extract content based on file type"""
-        if 'pdf' in file_type.lower():
+        """Extract content based on file type, with extension fallback"""
+        ft = file_type.lower()
+        ext = os.path.splitext(filepath)[1].lower()
+        if 'pdf' in ft or ext == '.pdf':
             return self.extract_text_from_pdf(filepath)
-        elif 'word' in file_type.lower() or 'document' in file_type.lower():
+        elif 'word' in ft or 'document' in ft or ext in ['.docx', '.doc']:
             return self.extract_text_from_docx(filepath)
+        elif 'text' in ft or 'plain' in ft or ext == '.txt':
+            return self.extract_text_from_txt(filepath)
+        elif 'powerpoint' in ft or ext in ['.ppt', '.pptx']:
+            return {
+                'content': '',
+                'page_count': 0,
+                'word_count': 0
+            }  # Placeholder for PowerPoint
+        elif 'excel' in ft or ext in ['.xls', '.xlsx']:
+            return {
+                'content': '',
+                'page_count': 0,
+                'word_count': 0
+            }  # Placeholder for Excel
         else:
             raise ValueError(f"Unsupported file type: {file_type}")
     

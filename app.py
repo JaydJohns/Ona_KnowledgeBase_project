@@ -17,7 +17,7 @@ def create_app():
     
     # Initialize extensions
     db.init_app(app)
-    CORS(app)
+    CORS(app, origins=["http://localhost:3000"], supports_credentials=True, allow_headers=["Content-Type", "Authorization"], methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     
     # Register blueprints
     app.register_blueprint(documents_bp, url_prefix='/api/documents')

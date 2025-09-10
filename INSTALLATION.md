@@ -70,15 +70,19 @@ For developers who want to modify the frontend or contribute to the project.
    npm install
    ```
 
+
 3. **Start Backend Server**
    ```bash
    # In the root directory
    python app.py
    ```
 
-4. **Start Frontend Development Server**
+4. **Frontend Setup**
    ```bash
-   # In a new terminal, from the frontend directory
+   cd frontend
+   npm install
+   # Create .env file:
+   echo "REACT_APP_API_URL=http://localhost:5000/api" > .env
    npm start
    ```
 

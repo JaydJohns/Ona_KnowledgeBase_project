@@ -27,7 +27,7 @@ class Document(db.Model):
     error_message = db.Column(db.Text)
     
     # Metadata
-    metadata = db.Column(db.Text)  # JSON string for flexible metadata
+    doc_metadata = db.Column(db.Text)  # JSON string for flexible metadata
     
     # Relationships
     concepts = db.relationship('Concept', secondary='document_concepts', back_populates='documents')
@@ -46,7 +46,7 @@ class Document(db.Model):
             'word_count': self.word_count,
             'page_count': self.page_count,
             'processing_status': self.processing_status,
-            'metadata': json.loads(self.metadata) if self.metadata else {}
+            'metadata': json.loads(self.doc_metadata) if self.doc_metadata else {}
         }
 
 class Concept(db.Model):

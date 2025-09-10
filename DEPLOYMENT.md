@@ -31,33 +31,16 @@ Since this project was created in a Gitpod environment, you'll need to push it t
 
 4. **Copy all files from this project** to your local repository directory
 
-5. **Add, commit, and push**:
+
+5. **Create a new branch, commit, and push**:
    ```bash
+   git checkout -b feature/ui-upgrade
    git add .
-   git commit -m "Initial commit: Second Brain Knowledge Repository
-
-   - Complete HCI document management system
-   - Document upload and processing (PDF/Word support)
-   - Intelligent concept extraction with HCI terminology
-   - Advanced search (keyword, semantic, concept-based)
-   - Interactive knowledge graph visualization
-   - Modern React frontend with dashboard
-   - Comprehensive REST API
-   - Full documentation and installation guide
-
-   Features:
-   ✅ Document upload and text extraction
-   ✅ HCI-focused concept detection and linking
-   ✅ Multi-modal search engine
-   ✅ Force-directed graph visualization
-   ✅ Web interface with React components
-   ✅ Complete API documentation
-   ✅ Sample data and test interface
-
-   Co-authored-by: Ona <no-reply@ona.com>"
-   
-   git push origin main
+   git commit -m "UI/UX upgrade: new document, search, analytics, and detail pages; improved docs and setup."
+   git push origin feature/ui-upgrade
    ```
+
+6. **Open a Pull Request** on GitHub to merge your branch into `main`.
 
 ### Option 2: Using Personal Access Token
 

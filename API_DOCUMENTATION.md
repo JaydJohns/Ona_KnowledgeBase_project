@@ -46,7 +46,6 @@ All API responses follow a consistent JSON format:
 ## Documents API
 
 ### List Documents
-
 Retrieve a paginated list of documents.
 
 ```http
@@ -54,22 +53,19 @@ GET /api/documents
 ```
 
 #### Parameters
-
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `page` | integer | 1 | Page number |
-| `per_page` | integer | 20 | Items per page (max 100) |
-| `status` | string | - | Filter by processing status |
-| `file_type` | string | - | Filter by file type |
+| Parameter   | Type    | Default | Description                      |
+|-------------|---------|---------|----------------------------------|
+| `page`      | integer | 1       | Page number                      |
+| `per_page`  | integer | 20      | Items per page (max 100)         |
+| `status`    | string  | -       | Filter by processing status      |
+| `file_type` | string  | -       | Filter by file type              |
 
 #### Example Request
-
 ```bash
 curl "http://localhost:5000/api/documents?page=1&per_page=10&status=completed"
 ```
 
 #### Example Response
-
 ```json
 {
   "documents": [
@@ -96,7 +92,6 @@ curl "http://localhost:5000/api/documents?page=1&per_page=10&status=completed"
 ```
 
 ### Upload Document
-
 Upload a new document for processing.
 
 ```http
@@ -104,18 +99,18 @@ POST /api/documents/upload
 ```
 
 #### Request
-
 - **Content-Type**: `multipart/form-data`
 - **Body**: File upload with key `file`
 
 #### Supported Formats
-
 - PDF (`.pdf`)
 - Microsoft Word (`.docx`, `.doc`)
+- Text (`.txt`)
+- PowerPoint (`.ppt`, `.pptx`)
+- Excel (`.xls`, `.xlsx`)
 - Maximum size: 50MB
 
 #### Example Request
-
 ```bash
 curl -X POST \
   -F "file=@document.pdf" \
